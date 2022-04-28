@@ -69,7 +69,20 @@ namespace Pudelko
 
         public bool Equals(Pudelko other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+                return false;
+
+            try
+            {
+                if (this.A == other.A || this.A == other.B || this.A == other.C)
+                    if (this.B == other.A || this.B == other.B || this.B == other.C)
+                        if(this.C == other.A || this.C == other.B || this.C == other.C)
+                            return true;
+                return false;
+            }
+            catch(NullReferenceException) {
+                return false;
+            }
         }
     }
 }
