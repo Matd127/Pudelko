@@ -6,8 +6,9 @@ namespace PudelkoLib
     {
         static void Main(string[] args)
         {
-            Pudelko pudelko = new Pudelko(15, 6, 3, UnitOfMeasure.meter);
-            Console.WriteLine(pudelko);
+            Pudelko p = new Pudelko(0.1, unit: UnitOfMeasure.milimeter);
+            Console.WriteLine(p.ToString("mm"));
+
 
         }
     }

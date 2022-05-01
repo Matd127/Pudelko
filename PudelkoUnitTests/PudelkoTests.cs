@@ -448,6 +448,18 @@ namespace PudelkoUnitTests
 
         #region Pole, Objêtoœæ ===================================
         // ToDo
+        [DataTestMethod, TestCategory("Objectosc Properties")]
+        [DataRow(0.100, 0.100, 1, 0.010)]
+        [DataRow(1,1,1,1)]
+        [DataRow(3.1, 8.67, 2.543, 68.348211)]
+
+
+
+        public void Volume_Meter_Test(double a, double b, double c, double res)
+        {
+            var p = new Pudelko(a, b, c, unit: UnitOfMeasure.meter);
+            Assert.AreEqual(res, p.Objetosc);
+        }
 
         #endregion
 
