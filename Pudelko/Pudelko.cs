@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PudelkoLib
 {
-    public class Pudelko : IFormattable, IEquatable<Pudelko>, IEnumerable
+    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>, IEnumerable
     {
         private double a;
         private double b;
