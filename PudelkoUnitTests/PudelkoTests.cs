@@ -419,16 +419,16 @@ namespace PudelkoUnitTests
         public void ToString_Default_Culture_EN()
         {
             var p = new Pudelko(2.5, 9.321);
-            string expectedStringEN = "2.500 m ? 9.321 m ? 0.100 m";
+            string expectedStringEN = "2.500 m × 9.321 m × 0.100 m";
 
             Assert.AreEqual(expectedStringEN, p.ToString());
         }
 
         [DataTestMethod, TestCategory("String representation")]
-        [DataRow(null, 2.5, 9.321, 0.1, "2.500 m ? 9.321 m ? 0.100 m")]
-        [DataRow("m", 2.5, 9.321, 0.1, "2.500 m ? 9.321 m ? 0.100 m")]
-        [DataRow("cm", 2.5, 9.321, 0.1, "250.0 cm ? 932.1 cm ? 10.0 cm")]
-        [DataRow("mm", 2.5, 9.321, 0.1, "2500 mm ? 9321 mm ? 100 mm")]
+        [DataRow(null, 2.5, 9.321, 0.1, "2.500 m × 9.321 m × 0.100 m")]
+        [DataRow("m", 2.5, 9.321, 0.1, "2.500 m × 9.321 m × 0.100 m")]
+        [DataRow("cm", 2.5, 9.321, 0.1, "250.0 cm × 932.1 cm × 10.0 cm")]
+        [DataRow("mm", 2.5, 9.321, 0.1, "2500 mm × 9321 mm × 100 mm")]
         public void ToString_Formattable_Culture_EN(string format, double a, double b, double c, string expectedStringRepresentation)
         {
             var p = new Pudelko(a, b, c, unit: UnitOfMeasure.meter);
@@ -447,12 +447,11 @@ namespace PudelkoUnitTests
 
 
         #region Pole, Obj?to?? ===================================
-        // ToDo
 
         // Objetosc
         [DataTestMethod, TestCategory("Objectosc_Meter")]
         [DataRow(0.100, 0.100, 1, 0.010)]
-        [DataRow(1,1,1,1)]
+        [DataRow(1, 1, 1, 1)]
         [DataRow(3.1, 8.67, 2.543, 68.348211)]
 
 
@@ -583,7 +582,40 @@ namespace PudelkoUnitTests
         #endregion
 
         #region Operators overloading ===========================
-        // ToDo
+
+        [DataTestMethod, TestCategory("Equal_operator")]
+
+        public void Equal_Operator() {
+
+            Pudelko p1 = new Pudelko(9.125, 7.247, 1.12);
+            Pudelko p2 = new Pudelko(1.12, 7.247, 9.125);
+
+            Assert.AreEqual(p1, p2);
+
+        }
+        [DataTestMethod, TestCategory("UnEqual_operator")]
+
+        public void Unequal_operator(){
+
+            Pudelko p1 = new Pudelko(7, 9, 9.10);
+            Pudelko p2 = new Pudelko(9.10, 1.09, 4);
+
+            Assert.AreNotEqual(p1, p2);
+        }
+
+        [DataTestMethod, TestCategory("Plus_operator")]
+
+        public void Plus_operator() {
+            Pudelko p1 = new Pudelko(7, 3, 5);
+            Pudelko p2 = new Pudelko(1, 2, 3.05);
+
+            var p3 = p1 + p2;
+            Pudelko res = new Pudelko(p3.A, p3.B, p3.C);
+
+            Assert.AreEqual(true, res.Equals(p1 + p2));
+        }
+
+
         #endregion
 
         #region Conversions =====================================
@@ -636,6 +668,20 @@ namespace PudelkoUnitTests
         #endregion
 
         #region Parsing =========================================
+
+        [DataTestMethod, TestCategory("Parsing")]
+        [DataRow("1 m × 1 m × 1 m", 1, 1, 1, UnitOfMeasure.meter)]
+        [DataRow("25 cm × 25 cm × 1 cm", 25, 25, 25, UnitOfMeasure.centimeter)]
+        [DataRow("172 mm × 172 mm × 172 mm", 25, 25, 25, UnitOfMeasure.milimeter)]
+
+        public void Parsing(string p, double a, double b, double c, UnitOfMeasure unit)
+        {
+            Pudelko p1 = Pudelko.Parse(p);
+            Assert.AreEqual(p1.A, a);
+            Assert.AreEqual(p1.B, b);
+            Assert.AreEqual(p1.C, c);
+            Assert.AreEqual(p1.Unit, unit);
+        }
 
         #endregion
 

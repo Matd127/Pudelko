@@ -6,8 +6,8 @@ namespace PudelkoLib
     {
         static void Main(string[] args)
         {
-            Pudelko p = new Pudelko(0.1, unit: UnitOfMeasure.milimeter);
-            Console.WriteLine(p.ToString("mm"));
+            Pudelko p = new Pudelko(0.12, unit: UnitOfMeasure.milimeter);
+            Console.WriteLine(p.ToString("m"));
 
 
         }
