@@ -10,7 +10,8 @@ namespace PudelkoLib
     {
         public static Pudelko Kompresuj(Pudelko p)
         {
-            throw new NotImplementedException();
+            var b = Math.Cbrt(p.Objetosc);
+            return new Pudelko(b, b, b);
         }
     }
 }
