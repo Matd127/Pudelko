@@ -366,8 +366,6 @@ namespace PudelkoUnitTests
         }
 
 
-
-
         [DataTestMethod, TestCategory("Constructors")]
         [DataRow(-1.0)]
         [DataRow(0)]
@@ -483,8 +481,6 @@ namespace PudelkoUnitTests
             Assert.AreEqual(res, p.Objetosc);
         }
 
-
-        //Pole
         [DataTestMethod, TestCategory("Pole_Meter")]
         [DataRow(0.1, 7, 0.2, 4.24)]
         [DataRow(1, 1, 1, 6)]
@@ -671,8 +667,8 @@ namespace PudelkoUnitTests
 
         [DataTestMethod, TestCategory("Parsing")]
         [DataRow("1 m × 1 m × 1 m", 1, 1, 1, UnitOfMeasure.meter)]
-        [DataRow("25 cm × 25 cm × 1 cm", 25, 25, 25, UnitOfMeasure.centimeter)]
-        [DataRow("172 mm × 172 mm × 172 mm", 25, 25, 25, UnitOfMeasure.milimeter)]
+        [DataRow("25 cm × 25 cm × 25 cm", 0.25, 0.25, 0.25, UnitOfMeasure.centimeter)]
+        [DataRow("172 mm × 172 mm × 172 mm", 0.172, 0.172, 0.172, UnitOfMeasure.milimeter)]
 
         public void Parsing(string p, double a, double b, double c, UnitOfMeasure unit)
         {
