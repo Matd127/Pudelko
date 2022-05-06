@@ -579,7 +579,7 @@ namespace PudelkoUnitTests
 
         #region Operators overloading ===========================
 
-        [DataTestMethod, TestCategory("Equal_operator")]
+        [TestMethod, TestCategory("Equal_operator")]
 
         public void Equal_Operator() {
 
@@ -589,7 +589,7 @@ namespace PudelkoUnitTests
             Assert.AreEqual(p1, p2);
 
         }
-        [DataTestMethod, TestCategory("UnEqual_operator")]
+        [TestMethod, TestCategory("UnEqual_operator")]
 
         public void Unequal_operator(){
 
@@ -599,7 +599,7 @@ namespace PudelkoUnitTests
             Assert.AreNotEqual(p1, p2);
         }
 
-        [DataTestMethod, TestCategory("Plus_operator")]
+        [TestMethod, TestCategory("Plus_operator")]
 
         public void Plus_operator() {
             Pudelko p1 = new Pudelko(7, 3, 5);
@@ -610,7 +610,6 @@ namespace PudelkoUnitTests
 
             Assert.AreEqual(true, res.Equals(p1 + p2));
         }
-
 
         #endregion
 

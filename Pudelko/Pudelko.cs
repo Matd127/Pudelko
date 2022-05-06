@@ -15,14 +15,6 @@ namespace PudelkoLib
         private double c;
         public UnitOfMeasure Unit { get; set; }
 
-        public static void CheckValue(double a, double b, double c) {
-            if (a < 0.001 || b < 0.001 || c < 0.001)
-                throw new ArgumentOutOfRangeException();
-
-            if (a > 10 || b > 10 || c > 10)
-                 throw new ArgumentOutOfRangeException();
-        }
-
         public double A {
             get => a;
             set => a = Math.Round(value, 3);
@@ -38,30 +30,30 @@ namespace PudelkoLib
             set => c = Math.Round(value, 3);
         }
 
-        public Pudelko(double? a = null, double? b = null, double? c = null, UnitOfMeasure unit = UnitOfMeasure.meter) {
+        public static void CheckValue(double a, double b, double c){
+            if (a < 0.001 || b < 0.001 || c < 0.001)
+                throw new ArgumentOutOfRangeException();
 
-            if (unit == UnitOfMeasure.meter) {
-                this.a = a == null ? 0.1 : (double)a;
-                this.b = b == null ? 0.1 : (double)b;
-                this.c = c == null ? 0.1 : (double)c;
-                Unit = unit;
-            }
+            if (a > 10 || b > 10 || c > 10)
+                throw new ArgumentOutOfRangeException();
+        }
 
+        public static double SetValue(UnitOfMeasure unit, double val) {
             if (unit == UnitOfMeasure.centimeter)
-            {
-                this.a = a == null ? 0.1 : (double)a/100;
-                this.b = b == null ? 0.1 : (double)b/100;
-                this.c = c == null ? 0.1 : (double)c/100;
-                Unit = unit;
-            }
+                return val /= 100;
+            else if (unit == UnitOfMeasure.milimeter)
+                return val /= 1000;
+            else
+                return val *= 1;
+        }
 
-            if (unit == UnitOfMeasure.milimeter)
-            {
-                this.a = a == null ? 0.1 : (double)a / 1000;
-                this.b = b == null ? 0.1 : (double)b / 1000;
-                this.c = c == null ? 0.1 : (double)c / 1000;
-                Unit = unit;       
-            }
+        public Pudelko(double? a = null, double? b = null, double? c = null, UnitOfMeasure unit = UnitOfMeasure.meter) {
+            Unit = unit;
+
+            this.a = a == null ? 0.1 : SetValue(unit, (double)a);
+            this.b = b == null ? 0.1 : SetValue(unit, (double)b);
+            this.c = c == null ? 0.1 : SetValue(unit, (double)c);
+                
             CheckValue(A, B, C);
            
         }
@@ -69,8 +61,7 @@ namespace PudelkoLib
         public double Objetosc => Math.Round((A * B * C), 9);
         public double Pole => Math.Round((A * B * 2) + (A * C * 2) + (B * C * 2), 6);
 
-        public override bool Equals(object obj)
-        {
+        public override bool Equals(object obj){
             if (obj is Pudelko pudelko)
                 return Equals(pudelko);
             else
@@ -83,59 +74,46 @@ namespace PudelkoLib
 
         public override string ToString() => $"{A:0.000} m \u00D7 {B:0.000} m \u00D7 {C:0.000} m";
 
-        public string ToString(string format)
-        {
+        public string ToString(string format){
             return ToString(format, CultureInfo.GetCultureInfo("en-US"));
         }
 
-        public string ToString(string format, IFormatProvider formatProvider = null)
-        {
-            if (formatProvider is null){
+        public string ToString(string format, IFormatProvider formatProvider = null){
+            if (formatProvider is null)
                 formatProvider = CultureInfo.CurrentCulture;
-            }
 
             if (format == null)
                 format = "m";
 
             return format switch
             {
-                "m" => $"{A.ToString("#0.000", formatProvider)} m \u00D7 " +
-                       $"{B.ToString("#0.000", formatProvider)} m \u00D7 " +
+                "m" => $"{A.ToString("#0.000", formatProvider)} m × " +
+                       $"{B.ToString("#0.000", formatProvider)} m × " +
                        $"{C.ToString("#0.000", formatProvider)} m",
 
-                "cm" => $"{(A*100).ToString("#0.0", formatProvider)} cm \u00D7 " +
-                        $"{(B*100).ToString("#0.0", formatProvider)} cm \u00D7 " +
+                "cm" => $"{(A*100).ToString("#0.0", formatProvider)} cm × " +
+                        $"{(B*100).ToString("#0.0", formatProvider)} cm × " +
                         $"{(C*100).ToString("#0.0", formatProvider)} cm",
 
-                "mm" => $"{(A * 1000).ToString("#0", formatProvider)} mm \u00D7 " +
-                        $"{(B * 1000).ToString("#0", formatProvider)} mm \u00D7 " +
+                "mm" => $"{(A * 1000).ToString("#0", formatProvider)} mm × " +
+                        $"{(B * 1000).ToString("#0", formatProvider)} mm × " +
                         $"{(C * 1000).ToString("#0", formatProvider)} mm",
 
                 _ => throw new FormatException(),
             };
         }
 
-        public bool Equals(Pudelko other)
-        {
+        public bool Equals(Pudelko other){
             if (other == null)
                 return false;
 
-            try
-            {
-                if (this.A == other.A || this.A == other.B || this.A == other.C)
-                    if (this.B == other.A || this.B == other.B || this.B == other.C)
-                        if(this.C == other.A || this.C == other.B || this.C == other.C)
-                            return true;
+            if (Object.ReferenceEquals(this, other))
+                return true;
 
-                return false;
-            }
-            catch(NullReferenceException) {
-                return false;
-            }
+            return (Pole == other.Pole && Objetosc == other.Objetosc);
         }
 
-        public IEnumerator GetEnumerator()
-        {
+        public IEnumerator GetEnumerator(){
             double[] p = new double[] { this.A, this.B, this.C };
             foreach(var wymiar in p)
                 yield return wymiar;
@@ -151,8 +129,7 @@ namespace PudelkoLib
         public static explicit operator double[](Pudelko p) => new double[] { p.a, p.b, p.c };
         public static implicit operator Pudelko(ValueTuple<int, int, int> p) => new(p.Item1, p.Item2, p.Item3, UnitOfMeasure.milimeter);
 
-        public double this[int index]
-        {
+        public double this[int index]{
             get{
                 if (index == 0)
                     return A;
@@ -167,7 +144,7 @@ namespace PudelkoLib
             }
         }
 
-        public static Pudelko Parse(string p) {
+        public static Pudelko Parse(string p){
             string[] kr = p.Split(" ");
             double a = double.Parse(kr[0].Replace('.', ','));
             double b = double.Parse(kr[3].Replace('.', ','));
@@ -181,7 +158,6 @@ namespace PudelkoLib
                 return new Pudelko(a, b, c, UnitOfMeasure.milimeter);
             else
                 throw new ArgumentException();
-
         }
     }
 }
